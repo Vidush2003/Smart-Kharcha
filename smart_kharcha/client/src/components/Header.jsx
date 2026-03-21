@@ -43,6 +43,14 @@ const Header = ({ openSidebar, setIsLoggedIn }) => {
     };
   }, []);
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("currentUser");
+    sessionStorage.removeItem("isLoggedIn");
+    setIsLoggedIn(false);
+    navigate("/");
+  };
+
   return (
     <div className="sticky top-0 z-40 bg-white/70 dark:bg-brand-dark/70 backdrop-blur-md border-b border-gray-200 dark:border-white/10 px-6 py-4 flex items-center justify-between transition-colors duration-300">
 

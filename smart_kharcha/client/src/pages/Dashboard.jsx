@@ -72,9 +72,9 @@ const Dashboard = () => {
 
     const amountNum = Number(formData.amount);
     
-    if (formData.type === "Expense") {
+    if (formData.type.toLowerCase() === "expense") {
       const currentTotal = transactions
-        .filter((t) => t.type === "Expense" && t._id !== editId)
+        .filter((t) => t.type?.toLowerCase() === "expense" && t._id !== editId)
         .reduce((acc, curr) => acc + (Number(curr.amount) || 0), 0);
       
       if (currentTotal + amountNum > budgetLimit) {
@@ -153,12 +153,11 @@ const Dashboard = () => {
   const currentMonth = new Date().getMonth();
   const currentYear = new Date().getFullYear();
 
-  const currentMonthTransactions = transactions.filter((t) => {
-    const d = new Date(t.date);
-    return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
-  });
+  // Sort all transactions by date (newest first)
+  const sortedTransactions = [...transactions].sort((a, b) => new Date(b.date) - new Date(a.date));
 
-  const finalTransactions = currentMonthTransactions.filter((t) =>
+  const finalTransactions = sortedTransactions.filter((t) =>
+    (t.title || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
     (t.category || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
     (t.amount || "").toString().includes(searchTerm) ||
     (t.type || "").toLowerCase().includes(searchTerm.toLowerCase())
