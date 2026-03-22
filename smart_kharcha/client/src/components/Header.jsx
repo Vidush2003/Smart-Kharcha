@@ -44,14 +44,20 @@ const Header = ({ openSidebar, setIsLoggedIn }) => {
   }, []);
 
   const handleLogout = () => {
-    // Navigate home first so we're not on a protected route when state flips
-    navigate("/", { replace: true });
+    // Set a flag to tell the LandingPage to ignore the openLogin signal for a moment
+    sessionStorage.setItem("logoutInProgress", "true");
     
-    // Then clear auth data
+    // Clear auth data
     localStorage.removeItem("token");
     localStorage.removeItem("currentUser");
     sessionStorage.removeItem("isLoggedIn");
     setIsLoggedIn(false);
+    
+    // Navigate home
+    navigate("/", { replace: true });
+    
+    // Clear the flag after the transition is likely done
+    setTimeout(() => sessionStorage.removeItem("logoutInProgress"), 500);
   };
 
   return (
