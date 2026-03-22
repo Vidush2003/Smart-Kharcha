@@ -1,15 +1,18 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLocation, useNavigate } from "react-router-dom";
-import { FaChartBar, FaCalendarCheck, FaLock, FaArrowRight, FaArrowUp, FaArrowDown } from "react-icons/fa";
+import { FaChartBar, FaCalendarCheck, FaLock, FaArrowRight, FaArrowUp, FaArrowDown, FaMoon, FaSun } from "react-icons/fa";
+import { ThemeContext } from "../context/ThemeContext";
 import LoginForm from "../components/auth/LoginForm";
 import RegisterForm from "../components/auth/RegisterForm";
 
 const LandingPage = ({ isLoggedIn, setIsLoggedIn }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { darkMode, setDarkMode } = useContext(ThemeContext);
   const [authMode, setAuthMode] = useState(null);
   const [user, setUser] = useState(null);
+  const [isEntering, setIsEntering] = useState(false);
 
   useEffect(() => {
     const savedUser = JSON.parse(localStorage.getItem("currentUser"));
@@ -61,10 +64,22 @@ const LandingPage = ({ isLoggedIn, setIsLoggedIn }) => {
             <span className="text-lg font-bold tracking-tight">Smart Kharcha</span>
           </div>
           <div className="flex items-center gap-6">
+            <button 
+              onClick={() => setDarkMode(!darkMode)}
+              className="p-2 text-slate-500 hover:text-indigo-600 transition-colors"
+            >
+              {darkMode ? <FaSun className="text-lg" /> : <FaMoon className="text-lg" />}
+            </button>
             {isLoggedIn && user ? (
               <div className="flex items-center gap-4">
                 <span className="text-sm font-bold text-slate-600 dark:text-slate-400">Hi, {user.name}</span>
-                <button onClick={() => navigate("/dashboard")} className="bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 px-4 py-2 rounded-lg text-sm font-bold hover:opacity-90 transition-opacity flex items-center gap-2">
+                <button 
+                  onClick={() => {
+                    setIsEntering(true);
+                    setTimeout(() => navigate("/dashboard"), 800);
+                  }} 
+                  className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-indigo-700 transition-all flex items-center gap-2 shadow-lg shadow-indigo-200 dark:shadow-none"
+                >
                   Dashboard <FaArrowRight size={12}/>
                 </button>
               </div>
@@ -82,18 +97,25 @@ const LandingPage = ({ isLoggedIn, setIsLoggedIn }) => {
         <div className="max-w-7xl mx-auto text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
             <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-8">
-              Take Control of <br />
-              <span className="text-indigo-600">Your Financial Future.</span>
+              {isLoggedIn ? `Good to see you, ` : `Take Control of `} <br />
+              <span className="text-indigo-600">{isLoggedIn ? user.name?.split(' ')[0] + "!" : "Your Financial Future."}</span>
             </h1>
             <p className="text-xl text-slate-500 dark:text-slate-400 max-w-2xl mx-auto mb-10 font-medium leading-relaxed">
-              Tracking your expenses shouldn't be a chore. Smart Kharcha is a minimal, high-performance tool designed for clarity and speed in 2026.
+              {isLoggedIn ? "Ready to see how your finances are looking today? Your dashboard is updated and waiting." : "Tracking your expenses shouldn't be a chore. Smart Kharcha is a minimal, high-performance tool designed for clarity and speed in 2026."}
             </p>
             <div className="flex justify-center gap-4 mb-20">
               <button 
-                onClick={() => isLoggedIn ? navigate("/dashboard") : setAuthMode('register')}
+                onClick={() => {
+                  if (isLoggedIn) {
+                    setIsEntering(true);
+                    setTimeout(() => navigate("/dashboard"), 800);
+                  } else {
+                    setAuthMode('register');
+                  }
+                }}
                 className="px-8 py-4 bg-indigo-600 text-white font-bold rounded-xl shadow-lg shadow-indigo-200 dark:shadow-none hover:bg-indigo-700 transition-all flex items-center gap-2"
               >
-                {isLoggedIn ? "Go to Dashboard" : "Start Tracking Now"} <FaArrowRight />
+                {isLoggedIn ? "Enter Dashboard" : "Start Tracking Now"} <FaArrowRight />
               </button>
             </div>
           </motion.div>
@@ -179,6 +201,28 @@ const LandingPage = ({ isLoggedIn, setIsLoggedIn }) => {
                )}
                <button onClick={() => setAuthMode(null)} className="absolute -top-4 -right-4 w-10 h-10 bg-white dark:bg-slate-800 rounded-full shadow-xl flex items-center justify-center hover:scale-110 transition-transform">✕</button>
             </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ✨ Entrance Overlay */}
+      <AnimatePresence>
+        {isEntering && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[200] bg-indigo-600 flex items-center justify-center text-white"
+          >
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.2 }}
+              className="text-center"
+            >
+              <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center text-2xl font-bold mb-4 mx-auto animate-pulse">S</div>
+              <h2 className="text-2xl font-bold tracking-tight">Entering Smart Kharcha...</h2>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
