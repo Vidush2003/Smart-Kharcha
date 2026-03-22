@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FaChartBar, FaCalendarCheck, FaLock, FaArrowRight, FaPlus, FaArrowUp, FaArrowDown } from "react-icons/fa";
