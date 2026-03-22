@@ -4,8 +4,6 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import SidebarLayout from "./layout/SidebarLayout";
 import Dashboard from "./pages/Dashboard";
 import CalendarPage from "./pages/CalendarPage";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 
 import HowToUse from "./pages/HowToUse";
@@ -22,21 +20,8 @@ function App() {
 
   return (
     <Routes>
-      {/* Landing Page */}
+      {/* Landing Page (Entry point for Login/Register Overlays) */}
       <Route path="/" element={<LandingPage />} />
-
-      {/* Auth */}
-      <Route
-        path="/login"
-        element={
-          isLoggedIn
-            ? <Navigate to="/dashboard" />
-            : <Login setIsLoggedIn={setIsLoggedIn} />
-        }
-      />
-
-      {/* Register */}
-      <Route path="/register" element={<Register />} />
 
       {/* Protected Routes */}
       <Route
@@ -44,7 +29,7 @@ function App() {
           isLoggedIn ? (
             <SidebarLayout setIsLoggedIn={setIsLoggedIn} />
           ) : (
-            <Navigate to="/login" />
+            <Navigate to="/" state={{ openLogin: true }} />
           )
         }
       >
@@ -55,6 +40,9 @@ function App() {
         <Route path="/how-to-use" element={<HowToUse />} />
         <Route path="/about" element={<About />} />
       </Route>
+
+      {/* Catch-all redirect to Landing Page */}
+      <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );
 }

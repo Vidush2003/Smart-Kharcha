@@ -1,14 +1,21 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLocation, useNavigate } from "react-router-dom";
 import { FaChartBar, FaCalendarCheck, FaLock, FaArrowRight, FaPlus, FaArrowUp, FaArrowDown } from "react-icons/fa";
 import LoginForm from "../components/auth/LoginForm";
 import RegisterForm from "../components/auth/RegisterForm";
+import { useEffect } from "react";
 
 const LandingPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const isLoggedIn = sessionStorage.getItem("isLoggedIn") === "true";
   const [authMode, setAuthMode] = useState(null); // 'login' or 'register' or null
+
+  useEffect(() => {
+    if (location.state?.openLogin) {
+      setAuthMode("login");
+    }
+  }, [location.state]);
 
   const features = [
     {
