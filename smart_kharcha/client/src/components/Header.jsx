@@ -44,11 +44,14 @@ const Header = ({ openSidebar, setIsLoggedIn }) => {
   }, []);
 
   const handleLogout = () => {
+    // Navigate home first so we're not on a protected route when state flips
+    navigate("/", { replace: true });
+    
+    // Then clear auth data
     localStorage.removeItem("token");
     localStorage.removeItem("currentUser");
     sessionStorage.removeItem("isLoggedIn");
     setIsLoggedIn(false);
-    navigate("/");
   };
 
   return (
