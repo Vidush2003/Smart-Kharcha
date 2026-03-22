@@ -13,6 +13,8 @@ import About from "./pages/About";
 
 import ReceiptScannerPage from "./pages/ReceiptScannerPage";
 
+import LandingPage from "./pages/LandingPage";
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
     return sessionStorage.getItem("isLoggedIn") === "true";
@@ -20,9 +22,12 @@ function App() {
 
   return (
     <Routes>
-      {/* Login */}
+      {/* Landing Page */}
+      <Route path="/" element={<LandingPage />} />
+
+      {/* Auth */}
       <Route
-        path="/"
+        path="/login"
         element={
           isLoggedIn
             ? <Navigate to="/dashboard" />
@@ -39,7 +44,7 @@ function App() {
           isLoggedIn ? (
             <SidebarLayout setIsLoggedIn={setIsLoggedIn} />
           ) : (
-            <Navigate to="/" />
+            <Navigate to="/login" />
           )
         }
       >

@@ -75,10 +75,19 @@ const Header = ({ openSidebar, setIsLoggedIn }) => {
         {/* 🌙 Dark Mode Toggle */}
         <button
           onClick={() => setDarkMode(!darkMode)}
-          className="text-xl hover:rotate-180 transition-transform duration-300"
+          className="text-xl hover:rotate-180 transition-transform duration-300 mr-2"
         >
           {darkMode ? "☀️" : "🌙"}
         </button>
+
+        {!currentUser && (
+          <button
+            onClick={() => navigate("/login")}
+            className="hidden md:block px-5 py-2 text-sm font-bold bg-brand-primary text-white rounded-xl hover:bg-brand-secondary transition-all shadow-md active:scale-95"
+          >
+            Sign In
+          </button>
+        )}
 
         {/* 👤 Profile */}
         <div className="relative" ref={dropdownRef}>
