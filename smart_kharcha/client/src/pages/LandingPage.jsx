@@ -23,8 +23,10 @@ const LandingPage = ({ isLoggedIn, setIsLoggedIn }) => {
   useEffect(() => {
     if (location.state?.openLogin) {
       setAuthMode("login");
+      // Clear state so it doesn't reappear on refresh
+      navigate("/", { replace: true, state: {} });
     }
-  }, [location.state]);
+  }, [location.state, navigate]);
 
   const features = [
     {
