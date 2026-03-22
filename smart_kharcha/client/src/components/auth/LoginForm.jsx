@@ -21,7 +21,6 @@ const LoginForm = ({ setIsLoggedIn, onClose, onSwitchToRegister }) => {
       localStorage.setItem("currentUser", JSON.stringify(data));
       setIsLoggedIn(true);
       if (onClose) onClose();
-      navigate("/dashboard");
     } catch (err) {
       setError(err.response?.data?.message || "Invalid email or password");
     }

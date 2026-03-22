@@ -5,11 +5,20 @@ import { FaChartBar, FaCalendarCheck, FaLock, FaArrowRight, FaArrowUp, FaArrowDo
 import LoginForm from "../components/auth/LoginForm";
 import RegisterForm from "../components/auth/RegisterForm";
 
-const LandingPage = () => {
+const LandingPage = ({ isLoggedIn, setIsLoggedIn }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const isLoggedIn = sessionStorage.getItem("isLoggedIn") === "true";
   const [authMode, setAuthMode] = useState(null);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const savedUser = JSON.parse(localStorage.getItem("currentUser"));
+    if (savedUser && isLoggedIn) {
+      setUser(savedUser);
+    } else {
+      setUser(null);
+    }
+  }, [isLoggedIn]);
 
   useEffect(() => {
     if (location.state?.openLogin) {
@@ -50,8 +59,19 @@ const LandingPage = () => {
             <span className="text-lg font-bold tracking-tight">Smart Kharcha</span>
           </div>
           <div className="flex items-center gap-6">
-            <button onClick={() => setAuthMode('login')} className="text-sm font-semibold hover:text-indigo-600 transition-colors">Sign in</button>
-            <button onClick={() => setAuthMode('register')} className="bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 px-4 py-2 rounded-lg text-sm font-bold hover:opacity-90 transition-opacity">Get Started</button>
+            {isLoggedIn && user ? (
+              <div className="flex items-center gap-4">
+                <span className="text-sm font-bold text-slate-600 dark:text-slate-400">Hi, {user.name}</span>
+                <button onClick={() => navigate("/dashboard")} className="bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 px-4 py-2 rounded-lg text-sm font-bold hover:opacity-90 transition-opacity flex items-center gap-2">
+                  Dashboard <FaArrowRight size={12}/>
+                </button>
+              </div>
+            ) : (
+              <>
+                <button onClick={() => setAuthMode('login')} className="text-sm font-semibold hover:text-indigo-600 transition-colors">Sign in</button>
+                <button onClick={() => setAuthMode('register')} className="bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 px-4 py-2 rounded-lg text-sm font-bold hover:opacity-90 transition-opacity">Get Started</button>
+              </>
+            )}
           </div>
         </div>
       </nav>
@@ -143,9 +163,16 @@ const LandingPage = () => {
             <div className="w-full h-full absolute inset-0 cursor-zoom-out" />
             <div onClick={(e) => e.stopPropagation()} className="relative z-10 w-full max-w-md">
                {authMode === 'login' ? (
-                 <LoginForm setIsLoggedIn={() => { sessionStorage.setItem("isLoggedIn", "true"); window.location.reload(); }} onClose={() => setAuthMode(null)} onSwitchToRegister={() => setAuthMode('register')} />
+                 <LoginForm 
+                    setIsLoggedIn={setIsLoggedIn} 
+                    onClose={() => setAuthMode(null)} 
+                    onSwitchToRegister={() => setAuthMode('register')} 
+                 />
                ) : (
-                 <RegisterForm onClose={() => setAuthMode(null)} onSwitchToLogin={() => setAuthMode('login')} />
+                 <RegisterForm 
+                    onClose={() => setAuthMode(null)} 
+                    onSwitchToLogin={() => setAuthMode('login')} 
+                 />
                )}
                <button onClick={() => setAuthMode(null)} className="absolute -top-4 -right-4 w-10 h-10 bg-white dark:bg-slate-800 rounded-full shadow-xl flex items-center justify-center hover:scale-110 transition-transform">✕</button>
             </div>

@@ -21,7 +21,7 @@ function App() {
   return (
     <Routes>
       {/* Landing Page (Entry point for Login/Register Overlays) */}
-      <Route path="/" element={<LandingPage />} />
+      <Route path="/" element={<LandingPage isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />} />
 
       {/* Protected Routes */}
       <Route
