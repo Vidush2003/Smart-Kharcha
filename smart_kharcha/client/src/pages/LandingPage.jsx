@@ -31,6 +31,11 @@ const LandingPage = ({ isLoggedIn, setIsLoggedIn }) => {
 
   useEffect(() => {
     if (location.state?.openLogin) {
+      if (sessionStorage.getItem("logoutInProgress")) {
+        // If we just logged out, ignore the auto-login prompt
+        navigate("/", { replace: true, state: {} });
+        return;
+      }
       setAuthMode("login");
       navigate("/", { replace: true, state: {} });
     }
