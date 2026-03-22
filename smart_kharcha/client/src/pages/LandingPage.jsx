@@ -170,6 +170,7 @@ const LandingPage = ({ isLoggedIn, setIsLoggedIn }) => {
                  />
                ) : (
                  <RegisterForm 
+                    setIsLoggedIn={setIsLoggedIn}
                     onClose={() => setAuthMode(null)} 
                     onSwitchToLogin={() => setAuthMode('login')} 
                  />

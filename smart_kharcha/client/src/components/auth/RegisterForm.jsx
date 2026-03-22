@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import api from "../../utils/api";
 
-const RegisterForm = ({ onClose, onSwitchToLogin }) => {
+const RegisterForm = ({ setIsLoggedIn, onClose, onSwitchToLogin }) => {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -20,8 +20,11 @@ const RegisterForm = ({ onClose, onSwitchToLogin }) => {
       return;
     }
     try {
-      await api.post("/auth/register", form);
-      if (onSwitchToLogin) onSwitchToLogin();
+      const { data } = await api.post("/auth/register", form);
+      sessionStorage.setItem("isLoggedIn", "true");
+      localStorage.setItem("currentUser", JSON.stringify(data));
+      setIsLoggedIn(true);
+      if (onClose) onClose();
     } catch (err) {
       setError(err.response?.data?.message || "Connection error");
     }
