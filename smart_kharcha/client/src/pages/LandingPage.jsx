@@ -70,16 +70,30 @@ const LandingPage = ({ isLoggedIn, setIsLoggedIn }) => {
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 selection:bg-indigo-100 selection:text-indigo-900 relative overflow-x-hidden transition-colors duration-500">
       
       {/* 🧊 Textured Background */}
-      <div className="absolute inset-0 z-0 opacity-[0.4] dark:opacity-[0.1] pointer-events-none" 
-           style={{ backgroundImage: `radial-gradient(#6366f1 1px, transparent 1px)`, backgroundSize: '32px 32px' }}>
+      <div className="absolute inset-0 z-0 opacity-[0.4] dark:opacity-[0.25] pointer-events-none transition-opacity duration-500" 
+           style={{ 
+             backgroundImage: darkMode 
+               ? `radial-gradient(rgba(99, 102, 241, 0.4) 1px, transparent 1px)` 
+               : `radial-gradient(#6366f1 1px, transparent 1px)`, 
+             backgroundSize: '32px 32px' 
+           }}>
       </div>
 
       {/* 🧭 Navigation */}
       <nav className="fixed top-0 w-full z-40 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md border-b border-slate-100 dark:border-slate-800">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold text-lg">S</div>
-            <span className="text-lg font-bold tracking-tight">Smart Kharcha</span>
+          <div className="flex items-center gap-3 group cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+            <div className="relative w-9 h-9 flex items-center justify-center">
+              <div className="absolute inset-0 bg-indigo-600 rounded-xl rotate-6 group-hover:rotate-12 transition-transform duration-300 opacity-20"></div>
+              <div className="relative w-full h-full bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-indigo-200 dark:shadow-none transition-transform duration-300 group-hover:scale-110">
+                <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.31-8.86c-1.77-.45-2.34-.94-2.34-1.67 0-.84.79-1.39 2.1-1.39 1.47 0 2.01.59 2.06 1.47h1.73c-.07-1.72-1.1-2.43-2.48-2.71V5h-2.1v2c-1.51.32-2.72 1.3-2.72 2.81 0 1.79 1.49 2.69 3.66 3.21 1.95.46 2.34 1.15 2.34 1.87 0 .53-.39 1.39-2.1 1.39-1.6 0-2.23-.72-2.32-1.64H8.33c.1 1.7 1.15 2.45 2.57 2.75V19h2.1v-2c1.55-.37 2.63-1.03 2.63-2.73 0-1.93-1.49-2.73-3.76-3.13z"/>
+                </svg>
+              </div>
+            </div>
+            <span className="text-xl font-black tracking-tighter bg-gradient-to-r from-slate-900 to-slate-600 dark:from-white dark:to-slate-400 bg-clip-text text-transparent group-hover:from-indigo-600 group-hover:to-purple-500 transition-all duration-300">
+              Smart Kharcha
+            </span>
           </div>
           <div className="flex items-center gap-4">
             <button 
